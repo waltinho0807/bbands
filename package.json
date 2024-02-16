@@ -1,0 +1,19 @@
+{
+  "name": "binance_spot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r dotenv/config index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.1",
+    "mongoose": "^8.1.2",
+    "tulind": "^0.8.20",
+    "ws": "^8.16.0"
+  }
+}
