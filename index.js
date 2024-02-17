@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const order = require("./model/Orders");
 
 const ws = new WebSocket(`wss://testnet.binance.vision/ws/${process.env.SYMBOL.toLowerCase()}@ticker`);
-const PROFIT = parseFloat(process.env.PROFITABLE);
+const PROFIT = parseFloat(process.env.PROFIT);
 let sellPrice = 0;
 
 const bbands_async = promisify(tulind.indicators.bbands.indicator);
@@ -56,18 +56,25 @@ ws.onmessage = async (event) =>  {
       klinedata = await bbands_inc(klinedata, 20, 2);
       klinedata = await rsi_inc(klinedata, 14)
 
-      console.log(typeof(klinedata[klinedata.length - 1].bbands_fast))
-      console.log(typeof(klinedata[klinedata.length - 1].rsi))
+      
+      
 
       let rsi = klinedata[klinedata.length - 1].rsi;
-      let bbands_fast = parseFloat(klinedata[klinedata.length - 1].bbands_fast);
+      let bbands_fast = klinedata[klinedata.length - 1].bbands_fast;
 
-
+     
     const currentPrice = parseFloat(obj.a);
+
+    console.log(bbands_fast)
+    console.log(rsi)
     
-    if(sellPrice === 0 && currentPrice < bbands_fast && rsi <= 40) {
+    console.log(currentPrice)
+    console.log(sellPrice)
+    console.log(PROFIT)
+    
+    if(sellPrice == 0 && currentPrice < bbands_fast && rsi < 40) {
         console.log("bom para comprar");   
-        newOrder("0.001", "BUY")
+        //newOrder("0.001", "BUY")
         sellPrice = currentPrice * PROFIT;
 
     }else if (sellPrice !== 0 && currentPrice >= sellPrice) {
