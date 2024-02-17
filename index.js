@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const order = require("./model/Orders");
 
 const ws = new WebSocket(`wss://testnet.binance.vision/ws/${process.env.SYMBOL.toLowerCase()}@ticker`);
-const PROFIT = parseFloat(PROFITABLE);
+const PROFIT = parseFloat(process.env.PROFITABLE);
 let sellPrice = 0;
 
 const bbands_async = promisify(tulind.indicators.bbands.indicator);
@@ -97,7 +97,7 @@ async function newOrder (quantity, side) {
    const recvWindow = 60000;
 
    const signature = crypto
-     .createHmac('sha256', SECRET_KEY)
+     .createHmac('sha256', process.env.SECRET_KEY)
      .update(`${new URLSearchParams({...data, timestamp, recvWindow})}`)
      .digest('hex');
     
@@ -108,7 +108,7 @@ async function newOrder (quantity, side) {
         const result = await axios({
             method: 'POST',
             url: `${API_URL}/v3/order${qs}`,
-            headers: {'X-MBX-APIKEY': API_KEY}
+            headers: {'X-MBX-APIKEY': process.env.API_KEY}
         });
 
         
