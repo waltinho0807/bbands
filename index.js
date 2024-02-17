@@ -5,8 +5,8 @@ const {promisify} = require('util');
 const mongoose = require('mongoose');
 const order = require("./model/Orders");
 
-const ws = new WebSocket(`${process.env.STREAM_URL || STREAM_URL}/${process.env.SYMBOL.toLowerCase() || SYMBOL.toLowerCase()}@ticker`);
-const PROFIT = parseFloat(process.env.PROFIT || PROFITABLE);
+const ws = new WebSocket(`${STREAM_URL}/${SYMBOL.toLowerCase()}@ticker`);
+const PROFIT = parseFloat(PROFITABLE);
 let sellPrice = 0;
 
 const bbands_async = promisify(tulind.indicators.bbands.indicator);
@@ -71,7 +71,7 @@ const { type } = require('os');
 async function newOrder (quantity, side) {
 
    const data = {
-    symbol: process.env.SYMBOL,
+    symbol: SYMBOL,
     type: 'MARKET',
     side,
     quantity
@@ -81,7 +81,7 @@ async function newOrder (quantity, side) {
    const recvWindow = 60000;
 
    const signature = crypto
-     .createHmac('sha256', process.env.SECRET_KEY || SECRET_KEY)
+     .createHmac('sha256', SECRET_KEY)
      .update(`${new URLSearchParams({...data, timestamp, recvWindow})}`)
      .digest('hex');
     
@@ -91,8 +91,8 @@ async function newOrder (quantity, side) {
     try {
         const result = await axios({
             method: 'POST',
-            url: `${process.env.API_URL || API_URL}/v3/order${qs}`,
-            headers: {'X-MBX-APIKEY': process.env.API_KEY || API_KEY}
+            url: `${API_URL}/v3/order${qs}`,
+            headers: {'X-MBX-APIKEY': API_KEY}
         });
 
         
