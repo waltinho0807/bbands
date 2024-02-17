@@ -9,7 +9,7 @@ const app = express();
 const mongoose = require('mongoose');
 const order = require("./model/Orders");
 
-const ws = new WebSocket(`${STREAM_URL}/${SYMBOL.toLowerCase()}@ticker`);
+const ws = new WebSocket(`wss://testnet.binance.vision/ws/${SYMBOL.toLowerCase()}@ticker`);
 const PROFIT = parseFloat(PROFITABLE);
 let sellPrice = 0;
 
