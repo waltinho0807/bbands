@@ -2,6 +2,10 @@ const WebSocket = require('ws');
 const tulind = require('tulind');
 const {promisify} = require('util');
 
+const express = require('express');
+const app = express();
+
+
 const mongoose = require('mongoose');
 const order = require("./model/Orders");
 
@@ -15,7 +19,19 @@ const rsi_async = promisify(tulind.indicators.rsi.indicator);
 let response = 0
 let klinedata = 0
 
-connectDB()
+connectDB();
+
+app.listen(3000, () => {
+    console.log("conectado porta 3000")
+})
+
+app.use('/', async (req, res, next) => {
+    console.log("Hello world");
+    let orders = await order.find();
+
+    res.json(orders)
+    
+});
 
 ws.onmessage = async (event) =>  {
     //console.clear()
