@@ -72,7 +72,7 @@ ws.onmessage = async (event) =>  {
     console.log(sellPrice)
     console.log(PROFIT)
     
-    if(sellPrice == 0 && currentPrice < bbands_fast && rsi < 40) {
+    if(sellPrice == 0 &&  rsi < 50) {
         console.log("bom para comprar");   
         newOrder("0.001", "BUY")
         sellPrice = currentPrice * PROFIT;
@@ -94,7 +94,7 @@ const { type } = require('os');
 async function newOrder (quantity, side) {
 
    const data = {
-    symbol: SYMBOL,
+    symbol: process.env.SYMBOL,
     type: 'MARKET',
     side,
     quantity
@@ -114,7 +114,7 @@ async function newOrder (quantity, side) {
     try {
         const result = await axios({
             method: 'POST',
-            url: `${API_URL}/v3/order${qs}`,
+            url: `${process.env.API_URL}/v3/order${qs}`,
             headers: {'X-MBX-APIKEY': process.env.API_KEY}
         });
 
