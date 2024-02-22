@@ -65,6 +65,8 @@ ws.onmessage = async (event) =>  {
      
     const currentPrice = parseFloat(obj.a);
 
+    console.log(klinedata[klinedata.length - 1].bbands_slow)
+    console.log(klinedata[klinedata.length - 1].bbands_histogram)
     console.log(bbands_fast)
     console.log(rsi)
     
@@ -72,11 +74,13 @@ ws.onmessage = async (event) =>  {
     console.log(sellPrice)
     console.log(PROFIT)
     
-    if(sellPrice == 0 && currentPrice <= bbands_fast &&  rsi < 50) {
-        console.log("bom para comprar");   
-        newOrder("0.001", "BUY")
-        sellPrice = currentPrice * PROFIT;
-
+    if(sellPrice == 0 && currentPrice <= bbands_fast &&  rsi < 45) {
+        console.log("bom para comprar"); 
+        if(currentPrice <= bbands_fast){
+            newOrder("0.001", "BUY")
+            sellPrice = currentPrice * PROFIT; 
+        } 
+        
     }else if (sellPrice !== 0 && currentPrice >= sellPrice) {
         console.log("Bom para vender");
         newOrder("0.001", "SELL")
