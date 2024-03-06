@@ -40,7 +40,7 @@ ws.onmessage = async (event) =>  {
     console.log("Best ask:" + obj.a)
     
     
-    response = await axios.get("https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=15m&limit=30")
+    response = await axios.get("https://api.binance.com/api/v3/klines?symbol=SOLUSDT&interval=15m&limit=30")
     
     let dados = response.data;
     
@@ -75,13 +75,13 @@ ws.onmessage = async (event) =>  {
     console.log(sellPrice)
     console.log(PROFIT)
     
-    if(sellPrice == 0 && close <= bbands_fast && rsi < 45) {
+    if(sellPrice === 0 && close <= bbands_fast && rsi < 45) {
         console.log("bom para comprar"); 
-        newOrder("0.001", "BUY")
+        newOrder("0.15", "BUY")
         sellPrice = currentPrice * PROFIT; 
-    }else if (sellPrice !== 0 && close >= sellPrice) {
+    }else if (sellPrice !== 0 ) {
         console.log("Bom para vender");
-        newOrder("0.001", "SELL")
+        newOrder("0.15", "SELL")
         sellPrice = 0;
 
     } else {
@@ -120,7 +120,7 @@ async function newOrder (quantity, side) {
             headers: {'X-MBX-APIKEY': process.env.API_KEY}
         });
 
-        
+        console.log(result)
 
         let orderStruture = {
             orderId: result.data.orderId,
@@ -137,24 +137,6 @@ async function newOrder (quantity, side) {
     } catch (error) {
         console.log(error)
     }
-}
-
-async function getCandles () {
-    response = await axios.get("https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=15m&limit=30")
-    let dados = response.data;
-    klinedata = dados.map((d) => ({
-        time: d[0] / 1000,
-        open: d[1] * 1,
-        high: d[2] * 1,
-        low: d[3] * 1,
-        close: d[4] * 1,
-        volume: d[5] * 1
-      }));
-
-    klinedata = await bbands_inc(klinedata, 20, 2);
-    klinedata = await rsi_inc(klinedata, 14)
-
-    return klinedata[klinedata.length - 1]
 }
 
 const bbands_inc = async (data, period, stddev) => {
