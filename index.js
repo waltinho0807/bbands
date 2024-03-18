@@ -77,11 +77,11 @@ ws.onmessage = async (event) =>  {
     
     if(sellPrice === 0 && close <= bbands_fast && rsi < 45) {
         console.log("bom para comprar"); 
-        newOrder("0.1", "BUY")
+        newOrder("0.07", "BUY")
         sellPrice = currentPrice * PROFIT; 
-    }else if (sellPrice >= close ) {
+    }else if (sellprice > 0 && sellPrice >= close) {
         console.log("Bom para vender");
-        newOrder("0.1", "SELL")
+        newOrder("0.07", "SELL")
         sellPrice = 0;
 
     } else {
